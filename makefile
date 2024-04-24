@@ -1,11 +1,37 @@
-MCU = atmega2560
-F_CPU = 16000000UL
-BAUD = 9600UL
-all: AVR
+PKG=AVG
 
-AVR: .\bin\debug\inter.elf
-	avr-objcopy .\bin\debug\inter.elf -O ihex .\bin\release\TilHulp.hex
+BUILD_DIR := ./build
+OUTPUT_DIR := ./release
+SRC_DIRS := ./src
 
-.\bin\debug\inter.elf: .\src\main.c .\src\lib\*
-	avr-g++.exe .\src\main.c .\src\lib\* -o .\bin\debug\inter.elf -mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os
 
+MCU=atmega2560
+
+CC=avr-gcc
+OBJCOPY=avr-objcopy
+CFLAGS=-Os -DF_CPU=16000000UL -mmcu=${MCU} -Wall
+PORT=COM4
+
+
+SRCS := $(shell powershell 'Get-ChildItem D:\001-programming\009-ProjectAVG\ProjectAVG\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
+
+
+BIN=${PKG}
+
+
+${OUTPUT_DIR}/${PKG}.hex: ${BUILD_DIR}/${PKG}.elf
+	${OBJCOPY} -O ihex $< $@
+
+${BUILD_DIR}/${PKG}.elf: ${SRCS}
+	${CC} -mmcu=${MCU} -o $@ $^
+
+
+install: ${OUTPUT_DIR}/${PKG}.hex
+	avrdude -v -c arduino -p ${MCU} -P ${PORT} -b 115200 -U flash:w:$<
+
+clean:
+	rm -f ${BIN}.elf ${BIN}.hex ${OBJS}
+
+-include $(DEPS)

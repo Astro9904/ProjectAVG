@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\WinAVR\\bin\\avr-gcc.exe",
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "windows-gcc-x64",
+            "compilerArgs": [
+                "-mmcu=atmega2560",     // Will ensure MCU defines are set correctly
+                "-DF_CPU=16000000UL",   // Will ensure F_CPU is set correctly
+                "-Os"                   // Will avoid optimization warnings re: _delay
+            ]
+        }
+    ],
+    "version": 4
+}

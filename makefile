@@ -13,9 +13,12 @@ CFLAGS=-Os -DF_CPU=16000000UL -mmcu=${MCU} -Wall
 PORT=COM4
 
 
-SRCS := $(shell powershell 'Get-ChildItem D:\001-programming\009-ProjectAVG\ProjectAVG\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
+SRCS := $(shell powershell 'Get-ChildItem .\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJS:.o=.d)
+
+all:
+	@echo ${SRCS}
 
 
 BIN=${PKG}
@@ -32,6 +35,6 @@ install: ${OUTPUT_DIR}/${PKG}.hex
 	avrdude -v -c arduino -p ${MCU} -P ${PORT} -b 115200 -U flash:w:$<
 
 clean:
-	rm -f ${BIN}.elf ${BIN}.hex ${OBJS}
+	rm -f ${BUILD_DIR}/${PKG}.elf ${OUTPUT_DIR}/${PKG}.hex ${OBJS}
 
 -include $(DEPS)

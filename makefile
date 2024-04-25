@@ -15,6 +15,7 @@ SRC_DIRS := ./src
 
 SRCS := $(shell powershell 'Get-ChildItem .\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
 
+
 ${OUTPUT_DIR}/${PKG}.hex: ${BUILD_DIR}/${PKG}.elf
 	${OBJCOPY} -O ihex $< $@
 

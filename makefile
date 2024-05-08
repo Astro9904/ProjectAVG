@@ -12,10 +12,11 @@ BUILD_DIR := ./build
 OUTPUT_DIR := ./release
 SRC_DIRS := ./src
 
-
-#SRCS := $(shell powershell 'Get-ChildItem .\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
-SRCS := $(shell find $(SOURCEDIR) -name '*.c')
-
+ifeq ($(OS), Windows_NT)
+	SRCS := $(shell powershell 'Get-ChildItem .\src -Recurse -Include ("*.c", "*.cpp") | Resolve-Path -Relative')
+else
+	SRCS := $(shell find $(SRC_DIRS) -name '*.c') 
+endif
 
 ${OUTPUT_DIR}/${PKG}.hex: ${BUILD_DIR}/${PKG}.elf
 	${OBJCOPY} -O ihex $< $@

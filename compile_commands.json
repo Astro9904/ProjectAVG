@@ -1,0 +1,41 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-c",
+      "-mmcu=atmega2560",
+      "-o",
+      "build/AVG.elf",
+      "src/lib/customio.c"
+    ],
+    "directory": "/home/ryan/coding/repos/ProjectAVG",
+    "file": "/home/ryan/coding/repos/ProjectAVG/src/lib/customio.c",
+    "output": "/home/ryan/coding/repos/ProjectAVG/build/AVG.elf"
+  },
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-c",
+      "-mmcu=atmega2560",
+      "-o",
+      "build/AVG.elf",
+      "src/lib/test.c"
+    ],
+    "directory": "/home/ryan/coding/repos/ProjectAVG",
+    "file": "/home/ryan/coding/repos/ProjectAVG/src/lib/test.c",
+    "output": "/home/ryan/coding/repos/ProjectAVG/build/AVG.elf"
+  },
+  {
+    "arguments": [
+      "/usr/bin/avr-gcc",
+      "-c",
+      "-mmcu=atmega2560",
+      "-o",
+      "build/AVG.elf",
+      "src/main.c"
+    ],
+    "directory": "/home/ryan/coding/repos/ProjectAVG",
+    "file": "/home/ryan/coding/repos/ProjectAVG/src/main.c",
+    "output": "/home/ryan/coding/repos/ProjectAVG/build/AVG.elf"
+  }
+]

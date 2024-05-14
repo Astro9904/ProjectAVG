@@ -1,0 +1,7 @@
+build/
+release/
+.cache/
+.clangd
+key
+key.pub
+

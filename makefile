@@ -4,8 +4,8 @@ MCU=atmega2560
 
 CC=avr-gcc
 OBJCOPY=avr-objcopy
-CFLAGS=-Os -DF_CPU=16000000UL -mmcu=${MCU} -Wall
-PORT=COM4
+CFLAGS=-O1 -DF_CPU=16000000UL -mmcu=${MCU} -Wno-discarded-qualifiers
+PORT=/dev/ttyUSB0
 
 
 BUILD_DIR := ./build
@@ -26,7 +26,7 @@ ${BUILD_DIR}/${PKG}.elf: ${SRCS}
 
 
 install: ${OUTPUT_DIR}/${PKG}.hex
-	avrdude -v -c arduino -p ${MCU} -P ${PORT} -b 115200 -U flash:w:$<
+	avrdude -v -c wiring -D -p ${MCU} -P ${PORT} -b 115200 -U flash:w:$<
 
 clean:
 	rm -f ${BUILD_DIR}/${PKG}.elf ${OUTPUT_DIR}/${PKG}.hex

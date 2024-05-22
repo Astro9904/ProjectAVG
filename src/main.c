@@ -15,6 +15,7 @@
 #define BUFF_SIZE   25
 
 
+
 int main(void)
 {
 	//uart_set_FrameFormat(USART_8BIT_DATA|USART_1STOP_BIT|USART_NO_PARITY|USART_ASYNC_MODE); // default settings
@@ -41,4 +42,11 @@ int main(void)
 	uart_putint(a);
 	uart_puts("\r\n");
 	a = uart_getint();
+  
+  
+	IO_t D7 = {&DDRH, &PORTH, PH4};
+	IO_t D8 = {&DDRH, &PORTH, PH5};
+	IO_t D4 = {&DDRG, &PORTG, PG5};
+	cio_pinMode(&D7, OUTPUT);
+	cio_digitalWrite(&D7, HIGH);
 }

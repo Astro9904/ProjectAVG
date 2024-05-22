@@ -12,7 +12,7 @@
 #include "lib/usart.h"
 
 
-#define BUFF_SIZE   25
+#define BUFF_SIZE   50
 
 
 

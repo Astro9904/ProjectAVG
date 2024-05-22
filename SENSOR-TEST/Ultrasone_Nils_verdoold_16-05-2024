@@ -1,0 +1,83 @@
+#include <Ultrasonic.h>
+
+// Definieer de pinnen voor de ultrasone sensoren (Trig, Echo)
+#define TRIG_PIN1 2   // boten detecteren
+#define ECHO_PIN1 3   // boten detecteren
+#define TRIG_PIN2 6   // boten detecteren 2
+#define ECHO_PIN2 7   // boten detecteren 2
+#define TRIG_PIN3 4   // boten onder brug   
+#define ECHO_PIN3 5   // boten onder brug
+
+// Definieer de pinnen voor de lampjes
+#define LED_PIN1 8
+#define LED_PIN2 9
+#define WIND_PIN 10
+
+// Maak Ultrasonic-objecten aan voor de drie sensoren
+Ultrasonic ultrasonic1(TRIG_PIN1, ECHO_PIN1);
+Ultrasonic ultrasonic2(TRIG_PIN2, ECHO_PIN2);
+Ultrasonic ultrasonic3(TRIG_PIN3, ECHO_PIN3);
+
+
+void setup() {
+  // Initialiseer de seriële communicatie met een baudrate van 9600
+  Serial.begin(9600);
+  
+  // Stel de LED-pinnen in als uitgang
+  pinMode(LED_PIN1, OUTPUT);
+  pinMode(LED_PIN2, OUTPUT);
+  pinMode(WIND_PIN, OUTPUT);
+
+  pinMode(A1, INPUT);
+
+}
+
+void loop() {
+  // Lees de afstanden gemeten door de ultrasone sensoren (in centimeters)
+  float afstand1 = ultrasonic1.read();
+  float afstand2 = ultrasonic2.read();
+  float afstand3 = ultrasonic3.read();
+
+  // Druk de gemeten afstanden af naar de seriële monitor
+  Serial.print("Afstand Sensor 1: ");
+  Serial.print(afstand1);
+  Serial.println(" cm");
+
+  Serial.print("Afstand Sensor 2: ");
+  Serial.print(afstand2);
+  Serial.println(" cm");
+
+  Serial.print("Afstand Sensor 3: ");
+   Serial.print(afstand3);
+  Serial.println(" cm");
+  delay(10);
+  // lezen van fan
+  float windsnelheid = 0;
+  windsnelheid = analogRead(A1);
+  windsnelheid = (windsnelheid / 1023) * 5;
+  Serial.println(windsnelheid);
+  digitalWrite(WIND_PIN, HIGH);
+  if (windsnelheid >= 0.5){ //hoger dan 1.5 dan hoog signaal geven
+    digitalWrite(WIND_PIN, LOW);
+  }
+  else{                     // lager dan 1.5 dan laag signaal geven
+    digitalWrite(WIND_PIN, LOW);
+  }
+   // Controleer de afstanden en stuur de LED's aan
+  if (afstand3 < 15.0) {
+    digitalWrite(LED_PIN1, HIGH);
+    Serial.println("led1");
+  } else {
+    digitalWrite(LED_PIN1, LOW);
+  }
+
+  if (afstand1 < 8.0) {
+    digitalWrite(LED_PIN2, HIGH);
+    Serial.println("led2");
+  } else {
+    digitalWrite(LED_PIN2, LOW);
+  }
+
+  // Wacht een korte tijd voordat je de volgende meting uitvoert
+  delay(1000); // Je kunt de vertraging aanpassen aan je behoeften
+}

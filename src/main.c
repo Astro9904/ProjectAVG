@@ -9,44 +9,117 @@
 #include <avr/pgmspace.h>
 #include <stdio.h>
 #include <string.h>
-#include "lib/usart.h"
+#include "lib/sonar.h"
 
 
-#define BUFF_SIZE   50
-
+enum modeSelectorModes modeSelector = AGV;
 
 
 int main(void)
 {
-	//uart_set_FrameFormat(USART_8BIT_DATA|USART_1STOP_BIT|USART_NO_PARITY|USART_ASYNC_MODE); // default settings
-	uart_init(BAUD_CALC(115200)); // 8n1 transmission is set as default
-	
-	stdout = &uart0_io; // attach uart stream to stdout & stdin
-	stdin = &uart0_io; // uart0_in and uart0_out are only available if NO_USART_RX or NO_USART_TX is defined
-	
-	sei(); // enable interrupts, library wouldn't work without this
-		
-	uart_puts("hello from usart 0\r\n"); // write const string to usart buffer // C++ restriction, in C its the same as uart_putstr()
-	
-	printf("hello from printf\n");
 
-	char buffer[BUFF_SIZE];
-	uart_gets(buffer, BUFF_SIZE); // read at most 24 bytes from buffer (CR,LF will not be cut)
-	
-	int a;
-	
-	uart_puts("gimmie a number: ");
-	a = uart_getint();
-	
-	uart_puts("numba a: ");
-	uart_putint(a);
-	uart_puts("\r\n");
-	a = uart_getint();
-  
-  
-	IO_t D7 = {&DDRH, &PORTH, PH4};
-	IO_t D8 = {&DDRH, &PORTH, PH5};
-	IO_t D4 = {&DDRG, &PORTG, PG5};
-	cio_pinMode(&D7, OUTPUT);
-	cio_digitalWrite(&D7, HIGH);
+    //sonar 1 ---
+    //IO_t D43 = {&DDRL, &PORTL, PL6};
+    //IO_t D19 = {&DDRD, &PIND, PD2};
+    //sonar 2 ----
+    //IO_t D45 = {&DDRL, &PORTL, PL4};
+    //IO_t D18 = {&DDRD, &PIND, PD3};
+
+
+    //init_motoren();
+    //PORTA |= (1 << PA6) | (1 << PA7);
+
+    //rechter_motor_uit();
+    //linker_motor_uit();
+
+//	while(1) {
+//		if (modeSelector == AGV) {
+//			AGV_Loop();
+//		}
+//		if (modeSelector == PFM) {
+//			PFM_Loop();
+//		}
+//	}
+
+}
+
+
+void AGV_Loop() {
+    
+    rechter_motor_vooruit();
+    linker_motor_vooruit();
+    _delay_ms(2000);
+    if (SonarSensorenDetectie() == 1) {
+	rechter_motor_uit();
+	linker_motor_uit();
+	_delay_ms(2000);
+	return;
+    }
+}
+
+void PFM_Loop() {
+
+}
+
+/*
+ */
+
+
+        //rechter_motor_vooruit();
+int SonarSensorenDetectie() {
+    return 1;
+}
+
+void init_motoren(void) {
+    DDRE |= (1<<PE5) | (1<<PE4);
+    DDRA |= (1<<PA0) | (1<<PA1) | (1<<PA2) | (1<<PA3) | (1 << PA6) | (1 << PA7);
+    TCCR3B |= (1<<CS32) | (1<< CS30) | (1<<WGM32); //CLOCK / 64
+    TCCR3A |= (1<<WGM30); //8 BIT FAST PWM MODE
+    OCR3B = 0;
+    OCR3C = 0;
+}
+
+void linker_motor_snelheid(int snelheid) {
+    OCR3B = snelheid;
+    TCCR3A |= (1 << COM3B1);
+}
+
+void rechter_motor_snelheid(int snelheid) {
+    OCR3C = snelheid;
+    TCCR3A |= (1 << COM3C1);
+}
+
+void linker_motor_vooruit(void){
+    PORTA &= ~(1 << PA0);
+    _delay_ms(5);
+    PORTA |= (1 << PA1);
+}
+
+void linker_motor_achteruit(void){
+    PORTA &= ~(1 << PA1);
+    _delay_ms(5);
+    PORTA |= (1 << PA0);
+
+}
+
+void linker_motor_uit(void){
+    PORTA &= ~(1 << PA0);
+    PORTA &= ~(1 << PA0);
+}
+
+void rechter_motor_achteruit(void){
+    PORTA &= ~(1 << PA2);
+    _delay_ms(5);
+    PORTA |= (1 << PA3);
+}
+
+void rechter_motor_vooruit(void){
+    PORTA &= ~(1 << PA3);
+    _delay_ms(5);
+    PORTA |= (1 << PA2);
+}
+
+void rechter_motor_uit(void){
+    PORTA &= ~(1 << PA2);
+    PORTA &= ~(1 << PA3);
 }

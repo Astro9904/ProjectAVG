@@ -4,7 +4,7 @@ MCU=atmega2560
 
 CC=avr-gcc
 OBJCOPY=avr-objcopy
-CFLAGS=-O1 -DF_CPU=16000000UL -mmcu=${MCU} -Wno-discarded-qualifiers
+CFLAGS=-O1 -DF_CPU=16000000UL -mmcu=${MCU} -Wno-discarded-qualifiers -Wno-cpp
 PORT=/dev/ttyUSB0
 
 

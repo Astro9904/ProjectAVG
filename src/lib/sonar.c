@@ -4,14 +4,14 @@
 #include <math.h>
 
 #define TRIGGER_LINKS_DIR DDRB
-#define TRIGGER_LINKS_BIT PB5
-#define TRIGGER_LINKS_ON PORTB |= (_BV(PB5))
-#define TRIGGER_LINKS_OFF PORTB &= ~(_BV(PB5))
+#define TRIGGER_LINKS_BIT PB2
+#define TRIGGER_LINKS_ON PORTB |= (_BV(PB2))
+#define TRIGGER_LINKS_OFF PORTB &= ~(_BV(PB2))
 
 #define TRIGGER_RECHTS_DIR DDRB
-#define TRIGGER_RECHTS_BIT PB4
-#define TRIGGER_RECHTS_ON PORTB |= (_BV(PB4))
-#define TRIGGER_RECHTS_OFF PORTB &= ~(_BV(PB4))
+#define TRIGGER_RECHTS_BIT PB3
+#define TRIGGER_RECHTS_ON PORTB |= (_BV(PB3))
+#define TRIGGER_RECHTS_OFF PORTB &= ~(_BV(PB3))
 
 volatile uint16_t g_PrevCountLinks = 0;				// Previous value of Timer4
 volatile uint16_t g_PulseWidthLinks = 0;				// Width of echo pulse from sensor, in uS (microseconds)
@@ -92,7 +92,7 @@ ISR(TIMER5_CAPT_vect) {
     g_measurement_flagRechts++;
 }
 
-/*int main() {
+int main() {
     HC_SR04_init();
     Serial.begin(9600);
     sei();										// Enable global interrupts
@@ -100,8 +100,8 @@ ISR(TIMER5_CAPT_vect) {
     while (1) {
         measurementRechts_start();
         _delay_ms(100);
-        measurementLinks_start();
-        _delay_ms(100);
+       // measurementLinks_start();
+       // _delay_ms(100);
     }
     return 0;
-}*/
+}
